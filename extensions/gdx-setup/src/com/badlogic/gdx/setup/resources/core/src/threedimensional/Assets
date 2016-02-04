@@ -1,0 +1,15 @@
+package %PACKAGE%;
+
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public class Assets {
+    public static AssetManager loadingManager = new AssetManager();
+    public static AssetManager manager = new AssetManager();
+
+    public static final Resolution[] resolutions = {new Resolution(320, 480, "320dp"), new Resolution(480, 640, "520dp"), new Resolution(640, 820, "720dp"), new Resolution(1000, 1600, "1080dp")};
+    public static final ResolutionFileResolver resolver = new ResolutionFileResolver(new InternalFileHandleResolver(), resolutions);
+}

@@ -17,6 +17,8 @@
 package com.badlogic.gdx.setup;
 
 import com.badlogic.gdx.setup.DependencyBank.ProjectType;
+import com.badlogic.gdx.setup.DependencyBank.ScreenType;
+import com.badlogic.gdx.setup.DependencyBank.DimensionType;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,6 +32,8 @@ public class ProjectBuilder {
 	DependencyBank bank;
 	List<ProjectType> modules = new ArrayList<ProjectType>();
 	List<Dependency> dependencies = new ArrayList<Dependency>();
+	List<DimensionType> dimensions = new ArrayList<DimensionType>();
+	List<ScreenType> screens = new ArrayList<ScreenType>();
 	File settingsFile;
 	File buildFile;
 
@@ -37,7 +41,7 @@ public class ProjectBuilder {
 		this.bank = bank;
 	}
 
-	public List<String> buildProject(List<ProjectType> projects, List<Dependency> dependencies) {
+	public List<String> buildProject(List<ProjectType> projects, List<Dependency> dependencies, List<DimensionType> dimensions, List<ScreenType> screens) {
 		List<String> incompatibilities = new ArrayList<String>();
 		for (Dependency dep : dependencies) {
 			for (ProjectType type : projects) {
@@ -47,6 +51,8 @@ public class ProjectBuilder {
 		}
 		this.modules = projects;
 		this.dependencies = dependencies;
+		this.dimensions = dimensions;
+		this.screens = screens;
 		return incompatibilities;
 	}
 

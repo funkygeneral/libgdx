@@ -20,6 +20,8 @@ import static java.awt.GridBagConstraints.*;
 
 import com.badlogic.gdx.setup.DependencyBank.ProjectDependency;
 import com.badlogic.gdx.setup.DependencyBank.ProjectType;
+import com.badlogic.gdx.setup.DependencyBank.DimensionType;
+import com.badlogic.gdx.setup.DependencyBank.ScreenType;
 import com.badlogic.gdx.setup.Executor.CharCallback;
 
 import java.awt.BorderLayout;
@@ -91,6 +93,8 @@ public class GdxSetupUI extends JFrame {
     ProjectBuilder builder;
     List<ProjectType> modules = new ArrayList<ProjectType>();
     List<Dependency> dependencies = new ArrayList<Dependency>();
+    List<DimensionType> dimensions = new ArrayList<DimensionType>();
+    List<ScreenType> screens = new ArrayList<ScreenType>();
 
     UI ui = new UI();
     static Point point = new Point();
@@ -195,7 +199,7 @@ public class GdxSetupUI extends JFrame {
             }
         }
 
-        List<String> incompatList = builder.buildProject(modules, dependencies);
+        List<String> incompatList = builder.buildProject(modules, dependencies, dimensions, screens);
         if (incompatList.size() == 0) {
             try {
                 builder.build();
@@ -451,8 +455,8 @@ public class GdxSetupUI extends JFrame {
 
         JPanel screensPanel = new JPanel(new GridLayout());
         JLabel screensLabel = new JLabel("Types of Screen");
-        JPanel typesPanel = new JPanel(new GridLayout());
-        JLabel typesLabel = new JLabel("Type of game");
+        JPanel dimensionsPanel = new JPanel(new GridLayout());
+        JLabel dimensionsLabel = new JLabel("Dimensions");
         JPanel subProjectsPanel = new JPanel(new GridLayout());
         JLabel projectsLabel = new JLabel("Sub Projects");
         JLabel extensionsLabel = new JLabel("Extensions");
@@ -480,14 +484,14 @@ public class GdxSetupUI extends JFrame {
             sdkLocationText.setDisabledTextColor(Color.GRAY);
 
             screensLabel.setForeground(new Color(255, 20, 20));
-            typesLabel.setForeground(new Color(255, 20, 20));
+            dimensionsLabel.setForeground(new Color(255, 20, 20));
             projectsLabel.setForeground(new Color(255, 20, 20));
             extensionsLabel.setForeground(new Color(255, 20, 20));
 
             screensPanel.setOpaque(true);
             screensPanel.setBackground(new Color(46, 46, 46));
-            typesPanel.setOpaque(true);
-            typesPanel.setBackground(new Color(46, 46, 46));
+            dimensionsPanel.setOpaque(true);
+            dimensionsPanel.setBackground(new Color(46, 46, 46));
             subProjectsPanel.setOpaque(true);
             subProjectsPanel.setBackground(new Color(46, 46, 46));
 
@@ -520,47 +524,64 @@ public class GdxSetupUI extends JFrame {
             add(sdkLocationText, new GridBagConstraints(1, 4, 1, 1, 1, 0, CENTER, HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
             add(sdkLocationButton, new GridBagConstraints(2, 4, 1, 1, 0, 0, CENTER, NONE, new Insets(0, 6, 0, 0), 0, 0));
 
-            String[] TYPES_OF_GAMES = new String[]{"2D", "3D"};
-            for (int i = 0; i < TYPES_OF_GAMES.length; i++) {
-                final int currentBox = i;
-                SetupCheckBox checkBox = new SetupCheckBox(TYPES_OF_GAMES[i]);
-                checkBox.setSelected(true);
-                typesPanel.add(checkBox);
+            for (final DimensionType dimensionType : DimensionType.values()) {
+                dimensions.add(dimensionType);
+                SetupCheckBox checkBox = new SetupCheckBox(dimensionType.getName().substring(0, 1).toUpperCase() + dimensionType.getName().substring(1, dimensionType.getName().length()));
+                if (dimensionType.equals(DimensionType.TWO_DIMENSIONAL)) {
+                    checkBox.setSelected(true);
+                }
+                dimensionsPanel.add(checkBox);
                 checkBox.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
                         SetupCheckBox box = (SetupCheckBox) e.getSource();
-
                         if (box.isSelected()) {
-
+                            dimensions.add(dimensionType);
+                            if (dimensionType.equals(DimensionType.TWO_DIMENSIONAL)) {
+                                if (dimensions.contains(DimensionType.THREE_DIMENSIONAL)) {
+                                    dimensions.remove(DimensionType.THREE_DIMENSIONAL);
+                                }
+                            } else {
+                                if (dimensions.contains(DimensionType.TWO_DIMENSIONAL)) {
+                                    dimensions.remove(DimensionType.TWO_DIMENSIONAL);
+                                }
+                            }
+                        } else {
+                            if (dimensions.contains(dimensionType)) {
+                                dimensions.remove(dimensionType);
+                            }
                         }
                     }
-                });
-            }
+                    }
 
-            add(typesLabel, new GridBagConstraints(0, 6, 1, 1, 0, 0, WEST, WEST, new Insets(20, 0, 0, 0), 0, 0));
-            add(typesPanel, new GridBagConstraints(0, 7, 3, 1, 0, 0, CENTER, HORIZONTAL, new Insets(5, 0, 0, 0), 10, 10));
+                                             );
+                                         }
 
-            String[] TYPES_OF_SCREENS = new String[]{"Loading", "Main", "Levels", "Game"};
-            for (int i = 0; i < TYPES_OF_SCREENS.length; i++) {
-                final int currentBox = i;
-                SetupCheckBox checkBox = new SetupCheckBox(TYPES_OF_SCREENS[i]);
+                        add(dimensionsLabel, new GridBagConstraints(0, 6, 1, 1, 0, 0, WEST, WEST, new Insets(20, 0, 0, 0), 0, 0));
+                add(dimensionsPanel, new GridBagConstraints(0, 7, 3, 1, 0, 0, CENTER, HORIZONTAL, new Insets(5, 0, 0, 0), 10, 10));
+
+            for (final ScreenType screenType : ScreenType.values()) {
+                screens.add(screenType);
+                SetupCheckBox checkBox = new SetupCheckBox(screenType.getName().substring(0, 1).toUpperCase() + screenType.getName().substring(1, screenType.getName().length()));
                 checkBox.setSelected(true);
                 screensPanel.add(checkBox);
                 checkBox.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
                         SetupCheckBox box = (SetupCheckBox) e.getSource();
-
                         if (box.isSelected()) {
-
+                            screens.add(screenType);
+                        } else {
+                            if (screens.contains(screenType)) {
+                                screens.remove(screenType);
+                            }
                         }
                     }
                 });
             }
 
-            add(screensLabel, new GridBagConstraints(0, 8, 1, 1, 0, 0, WEST, WEST, new Insets(20, 0, 0, 0), 0, 0));
-            add(screensPanel, new GridBagConstraints(0, 9, 3, 1, 0, 0, CENTER, HORIZONTAL, new Insets(5, 0, 0, 0), 10, 10));
+                add(screensLabel, new GridBagConstraints(0, 8, 1, 1, 0, 0, WEST, WEST, new Insets(20, 0, 0, 0), 0, 0));
+                add(screensPanel, new GridBagConstraints(0, 9, 3, 1, 0, 0, CENTER, HORIZONTAL, new Insets(5, 0, 0, 0), 10, 10));
 
             for (final ProjectType projectType : ProjectType.values()) {
                 if (projectType.equals(ProjectType.CORE)) {
@@ -588,8 +609,8 @@ public class GdxSetupUI extends JFrame {
                 });
             }
 
-            add(projectsLabel, new GridBagConstraints(0, 10, 1, 1, 0, 0, WEST, WEST, new Insets(20, 0, 0, 0), 0, 0));
-            add(subProjectsPanel, new GridBagConstraints(0, 11, 3, 1, 0, 0, CENTER, HORIZONTAL, new Insets(5, 0, 0, 0), 10, 10));
+                add(projectsLabel, new GridBagConstraints(0, 10, 1, 1, 0, 0, WEST, WEST, new Insets(20, 0, 0, 0), 0, 0));
+                add(subProjectsPanel, new GridBagConstraints(0, 11, 3, 1, 0, 0, CENTER, HORIZONTAL, new Insets(5, 0, 0, 0), 10, 10));
 
             int depCounter = 0;
 
@@ -636,7 +657,7 @@ public class GdxSetupUI extends JFrame {
                 extensionsPanels.add(extensionPanel);
             }
 
-            add(extensionsLabel, new GridBagConstraints(0, 12, 1, 1, 0, 0, WEST, WEST, new Insets(20, 0, 0, 0), 0, 0));
+                add(extensionsLabel, new GridBagConstraints(0, 12, 1, 1, 0, 0, WEST, WEST, new Insets(20, 0, 0, 0), 0, 0));
             int rowCounter = 13;
             for (JPanel extensionsPanel : extensionsPanels) {
                 add(extensionsPanel, new GridBagConstraints(0, rowCounter, 3, 1, 0, 0, CENTER, HORIZONTAL, new Insets(5, 0, 0, 0), 10, 10));
