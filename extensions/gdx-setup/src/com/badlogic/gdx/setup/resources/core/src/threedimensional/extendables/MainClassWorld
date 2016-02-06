@@ -1,0 +1,45 @@
+package %PACKAGE%.extendables;
+
+import com.badlogic.gdx.physics.bullet.Bullet;
+import com.badlogic.gdx.physics.bullet.collision.ContactListener;
+import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
+import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
+import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
+import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
+import com.badlogic.gdx.utils.ArrayMap;
+import %PACKAGE%.objects.models.GameObject;
+
+public class %MAIN_CLASS%World {
+
+    public ArrayMap<String, GameObject.Constructor> constructors;
+
+    private btCollisionConfiguration collisionConfig;
+    private btDispatcher dispatcher;
+    private btBroadphaseInterface broadphase;
+    public btCollisionWorld collisionWorld;
+
+    public int state;
+
+    public %MAIN_CLASS%World() {
+        Bullet.init();
+
+        collisionConfig = new btDefaultCollisionConfiguration();
+        dispatcher = new btCollisionDispatcher(collisionConfig);
+        broadphase = new btDbvtBroadphase();
+        collisionWorld = new btCollisionWorld(dispatcher, broadphase, collisionConfig);
+    }
+
+    public void dispose() {
+        for (GameObject.Constructor ctor : constructors.values())
+            ctor.dispose();
+        constructors.clear();
+
+        collisionWorld.dispose();
+        broadphase.dispose();
+        dispatcher.dispose();
+        collisionConfig.dispose();
+    }
+}

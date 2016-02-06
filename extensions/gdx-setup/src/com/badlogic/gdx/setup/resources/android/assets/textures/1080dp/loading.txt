@@ -1,0 +1,11 @@
+loading.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+funkyLogo
+  rotate: false
+  xy: 2, 2
+  size: 516, 576
+  orig: 516, 576
+  offset: 0, 0
+  index: -1

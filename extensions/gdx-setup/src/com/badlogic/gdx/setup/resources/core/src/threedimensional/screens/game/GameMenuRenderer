@@ -1,0 +1,22 @@
+package %PACKAGE%.screens.game;
+
+import %PACKAGE%.extendables.%MAIN_CLASS%MenuRenderer;
+
+public class GameMenuRenderer extends %MAIN_CLASS%MenuRenderer {
+
+    private final GameMenu menu;
+
+    public GameMenuRenderer(GameMenu menu) {
+        this.menu = menu;
+    }
+
+    public void render() {
+        super.render();
+        spriteBatch.begin();
+        spriteBatch.enableBlending();
+        menu.pauseButton.draw(spriteBatch);
+        menu.mainButton.draw(spriteBatch);
+        menu.playButton.draw(spriteBatch);
+        spriteBatch.end();
+    }
+}

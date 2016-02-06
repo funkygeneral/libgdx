@@ -1,0 +1,71 @@
+package %PACKAGE%.screens.loading;
+
+import com.badlogic.gdx.Input;
+import %PACKAGE%.Assets;
+import %PACKAGE%.%MAIN_CLASS%;
+import %PACKAGE%.extendables.%MAIN_CLASS%Screen;
+import %PACKAGE%.screens.main.MainScreen;
+
+public class LoadingScreen extends %MAIN_CLASS%Screen {
+    private static final String TAG = LoadingScreen.class.getSimpleName();
+
+    private LoadingMenu menu;
+    private LoadingMenuRenderer menuRenderer;
+
+    int progress;
+
+    public LoadingScreen(%MAIN_CLASS% game) {
+        super(game);
+        menu = new LoadingMenu();
+        menuRenderer = new LoadingMenuRenderer(menu);
+        Assets.loadManager();
+    }
+
+    private void update(float delta) {
+        if (Assets.manager.update()) {
+            Assets.loadAssets();
+            game.setScreen(new MainScreen(game));
+        }
+        progress = (int) (Assets.manager.getProgress() * 100);
+        menu.developerLogo.progressString = progress + "%";
+    }
+
+    public void render(float delta) {
+        super.render(delta);
+        update(delta);
+        menuRenderer.render();
+    }
+
+    public void dispose() {
+        menu.dispose();
+        menuRenderer.dispose();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        switch (keycode) {
+            case Input.Keys.SPACE:
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        switch (keycode) {
+            case Input.Keys.SPACE:
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+}

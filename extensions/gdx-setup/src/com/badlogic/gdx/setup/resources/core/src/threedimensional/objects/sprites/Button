@@ -1,0 +1,40 @@
+package %PACKAGE%.objects.sprites;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
+import %PACKAGE%.Assets;
+import %PACKAGE%.%MAIN_CLASS%;
+
+public class Button extends DynamicGameObject {
+
+    public float stateTime;
+    public int frame;
+
+    public String descriptionString = "Pause";
+    private BitmapFont descriptionFont;
+    private GlyphLayout glyphLayout;
+    private Color yellowColor;
+
+    public Button(float x, float y) {
+        super(x, y, Assets.buttons.getKeyFrame(0).getRegionWidth(), Assets.buttons.getKeyFrame(0).getRegionHeight());
+        this.descriptionFont = Assets.getFont(Assets.descriptionFont);
+        this.glyphLayout = new GlyphLayout();
+        this.yellowColor = %MAIN_CLASS%.getYellowColor();
+    }
+
+    public void update (float deltaTime) {
+        stateTime += deltaTime;
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alpha);
+        batch.draw(Assets.buttons.getKeyFrame(frame), position.x - (width / 2), position.y - (height / 2), (width / 2), (height / 2), width, height, scale, scale, rotation);
+        int descriptionStringLength = (int) (descriptionString.length() * scale);
+        glyphLayout.setText(descriptionFont, descriptionString, 0, descriptionStringLength, yellowColor, 0, Align.center, false, null);
+        descriptionFont.draw(batch, glyphLayout, position.x, position.y - (height * 0.7f));
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1);
+    }
+}

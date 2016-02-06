@@ -1,0 +1,25 @@
+package %PACKAGE%.screens.game;
+
+import %PACKAGE%.extendables.%MAIN_CLASS%Menu;
+import %PACKAGE%.objects.sprites.Button;
+import %PACKAGE%.objects.sprites.Logo;
+import %PACKAGE%.objects.sprites.PlayButton;
+
+public class GameMenu extends %MAIN_CLASS%Menu {
+
+    public Button mainButton;
+    public Button pauseButton;
+    public PlayButton playButton;
+
+    public GameMenu() {
+        super();
+        this.playButton = new PlayButton(CENTER_X, STAGE_HEIGHT * 0.35f);
+        this.mainButton = new Button(STAGE_WIDTH * 0.925f, STAGE_HEIGHT * 0.15f);
+        mainButton.frame = 0;
+        mainButton.descriptionString = "Main Menu";
+        this.pauseButton = new Button(STAGE_WIDTH * 0.075f, STAGE_HEIGHT * 0.875f);
+        pauseButton.frame = 1;
+        pauseButton.descriptionString = "Pause";
+        pauseButton.scale = 0;
+    }
+}

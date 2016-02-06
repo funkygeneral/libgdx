@@ -1,0 +1,14 @@
+package %PACKAGE%.screens.loading;
+
+import %PACKAGE%.extendables.%MAIN_CLASS%Menu;
+import %PACKAGE%.objects.sprites.DeveloperLogo;
+
+public class LoadingMenu extends %MAIN_CLASS%Menu {
+
+    public DeveloperLogo developerLogo;
+
+    public LoadingMenu() {
+        super();
+        this.developerLogo = new DeveloperLogo(CENTER_X, CENTER_Y);
+    }
+}

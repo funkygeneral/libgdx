@@ -1,0 +1,33 @@
+package %PACKAGE%.screens.main;
+
+import %PACKAGE%.Settings;
+import %PACKAGE%.extendables.%MAIN_CLASS%Menu;
+import %PACKAGE%.objects.sprites.Button;
+import %PACKAGE%.objects.sprites.Logo;
+import %PACKAGE%.objects.sprites.PlayButton;
+
+public class MainMenu extends %MAIN_CLASS%Menu {
+
+    public Logo logo;
+    public Button settingsButton;
+    public Button soundButton;
+    public PlayButton playButton;
+
+    public MainMenu() {
+        super();
+        this.logo = new Logo(CENTER_X, STAGE_HEIGHT * 0.85f);
+        this.settingsButton = new Button(STAGE_WIDTH * 0.075f, STAGE_HEIGHT * 0.15f);
+        settingsButton.frame = 2;
+        settingsButton.descriptionString = "Settings";
+        this.soundButton = new Button(CENTER_X, STAGE_HEIGHT * 0.45f);
+        if(Settings.soundEnabled) {
+            soundButton.frame = 3;
+            soundButton.descriptionString = "Sound on";
+        } else {
+            soundButton.frame = 4;
+            soundButton.descriptionString = "Sound off";
+        }
+        soundButton.scale = 0;
+        this.playButton = new PlayButton(CENTER_X, STAGE_HEIGHT * 0.4f);
+    }
+}

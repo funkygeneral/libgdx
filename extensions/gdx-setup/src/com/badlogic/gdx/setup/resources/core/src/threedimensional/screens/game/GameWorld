@@ -1,0 +1,81 @@
+package %PACKAGE%.screens.game;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.ContactListener;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
+import com.badlogic.gdx.utils.ArrayMap;
+import %PACKAGE%.extendables.%MAIN_CLASS%World;
+import %PACKAGE%.objects.models.GameObject;
+import %PACKAGE%.objects.models.Character;
+import %PACKAGE%.objects.models.Floor;
+import %PACKAGE%.Assets;
+
+public class GameWorld extends %MAIN_CLASS%World {
+    private static final String TAG = GameWorld.class.getSimpleName();
+
+    public static final int STATE_READY = 0;
+    public static final int STATE_RUNNING = 1;
+    public static final int STATE_PAUSE = 2;
+    public static final int STATE_FINISH = 3;
+    public static final int STATE_GAME_OVER = 4;
+
+    class MyContactListener extends ContactListener {
+        @Override
+        public boolean onContactAdded(int userValue0, int partId0, int index0, boolean match0, int userValue1, int partId1,
+                                      int index1, boolean match1) {
+            Gdx.app.log(TAG, "userValue0: " + userValue0 + ", partId0: " + partId0 + ", index0: " + index0 + ", match0: " + match0 + "\n" + "userValue1: " + userValue1 + ", partId1: " + partId1 + ", index1: " + index1 + ", match1: " + match1);
+            if (match0) {
+                //((ColorAttribute) instances.get(userValue0).materials.get(0).get(ColorAttribute.Diffuse)).color.set(Color.WHITE);
+            } else if (match1) {
+                //((ColorAttribute) instances.get(userValue1).materials.get(0).get(ColorAttribute.Diffuse)).color.set(Color.WHITE);
+            }
+            return true;
+        }
+    }
+
+    private static final String NODE_CHARCTER = "Character";
+    private static final String NODE_FLOOR = "Floor";
+
+    public Character character;
+    public Floor floor;
+
+    private MyContactListener contactListener;
+
+    public GameWorld() {
+        super();
+        contactListener = new MyContactListener();
+        fillConstructors();
+        makeInstances();
+        this.state = STATE_READY;
+    }
+
+    private void fillConstructors() {
+        constructors = new ArrayMap<String, GameObject.Constructor>(String.class, GameObject.Constructor.class);
+        constructors.put(NODE_FLOOR, new GameObject.Constructor(Assets.macocoModel, NODE_FLOOR, new btBoxShape(new Vector3(7.5f, 0.5f, 7.5f))));
+        constructors.put(NODE_CHARCTER, new GameObject.Constructor(Assets.macocoModel, NODE_CHARCTER, new btBoxShape(new Vector3(1f, 2.8f, 0.5f))));
+    }
+
+    private void makeInstances() {
+        GameObject waterObject = constructors.get(NODE_FLOOR).construct();
+        floor = new Floor(waterObject);
+        floor.setPosition(new Vector3(0, -0.5f, 0));
+        collisionWorld.addCollisionObject(floor.gameObject.body);
+
+        GameObject macocoObject = constructors.get(NODE_CHARCTER).construct();
+        character = new Character(macocoObject);
+        character.setPosition(new Vector3(0, 3, 0));
+        collisionWorld.addCollisionObject(character.gameObject.body);
+    }
+
+    public void update(float delta) {
+        character.update(delta);
+    }
+
+    public void dispose() {
+        contactListener.dispose();
+        floor.gameObject.dispose();
+        character.gameObject.dispose();
+        super.dispose();
+    }
+}

@@ -1,0 +1,50 @@
+package %PACKAGE%.screens.game;
+
+import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import %PACKAGE%.extendables.%MAIN_CLASS%WorldRenderer;
+
+public class GameWorldRenderer extends %MAIN_CLASS%WorldRenderer {
+    private GameWorld gameWorld;
+
+    GameWorldRenderer(GameWorld gameWorld) {
+        super();
+        this.gameWorld = gameWorld;
+
+        cam.position.set(0, 6, 14);
+        cam.lookAt(0, 3, 0);
+        cam.near = 1f;
+        cam.far = 300f;
+        cam.update();
+
+        environment.add(new DirectionalLight().set(1f, 1f, 1f, 0f, -0.5f, -1f));
+
+        gameWorld.collisionWorld.setDebugDrawer(debugDrawer);
+    }
+
+    public void render() {
+        super.render();
+
+        modelBatch.begin(cam);
+        modelBatch.render(gameWorld.floor.gameObject, environment);
+        modelBatch.render(gameWorld.character.gameObject, environment);
+        modelBatch.end();
+
+        renderDebug();
+    }
+
+    private void renderDebug() {
+        if (debugMode) {
+            debugDrawer.begin(cam);
+            gameWorld.collisionWorld.debugDrawWorld();
+            debugDrawer.end();
+        }
+    }
+
+    public void dispose() {
+        modelBatch.dispose();
+    }
+}

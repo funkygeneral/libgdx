@@ -3,10 +3,30 @@ package %PACKAGE%.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import %PACKAGE%.%MAIN_CLASS%;
+import %PACKAGE%.IActivityRequestHandler;
 
-public class DesktopLauncher {
+public class DesktopLauncher implements IActivityRequestHandler {
+	private static DesktopLauncher application;
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new %MAIN_CLASS%(), config);
+		config.title = "%MAIN_CLASS%";
+		config.width = %MAIN_CLASS%.WIDTH;
+		config.height = %MAIN_CLASS%.HEIGHT;
+
+		if (application == null) {
+			application = new DesktopLauncher();
+		}
+
+		new LwjglApplication(new %MAIN_CLASS%(application), config);
+	}
+
+	@Override
+	public String getTranslation(int kindOfString) {
+		return null;
+	}
+
+	@Override
+	public String[] getTranslationArrays(int kindOfString) {
+		return new String[0];
 	}
 }

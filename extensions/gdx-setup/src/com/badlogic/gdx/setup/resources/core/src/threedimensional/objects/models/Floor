@@ -1,0 +1,13 @@
+package %PACKAGE%.objects.models;
+
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
+
+public class Floor extends %MAIN_CLASS%Object {
+    public Floor(GameObject gameObject) {
+        super(gameObject);
+        this.gameObject.body.setUserValue(1);
+        this.gameObject.body.setCollisionFlags(this.gameObject.body.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
+        //this.gameObject.body.setContactCallbackFlag(World.FLAG_MACOCO);
+        //this.gameObject.body.setContactCallbackFilter(World.FLAG_ALL);
+    }
+}

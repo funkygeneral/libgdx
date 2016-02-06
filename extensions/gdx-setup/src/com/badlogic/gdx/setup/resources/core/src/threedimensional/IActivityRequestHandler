@@ -1,0 +1,6 @@
+package %PACKAGE%;
+
+public interface IActivityRequestHandler {
+	    String getTranslation(int kindOfString);
+	    String[] getTranslationArrays(int kindOfString);
+}

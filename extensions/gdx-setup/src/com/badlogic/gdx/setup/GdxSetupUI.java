@@ -126,7 +126,7 @@ public class GdxSetupUI extends JFrame {
         builder = new ProjectBuilder(new DependencyBank());
         modules.add(ProjectType.CORE);
         dependencies.add(builder.bank.getDependency(ProjectDependency.GDX));
-        dependencies.add(builder.bank.getDependency(ProjectDependency.BOX2D));
+        dependencies.add(builder.bank.getDependency(ProjectDependency.BULLET));
     }
 
     void generate() {
@@ -527,9 +527,7 @@ public class GdxSetupUI extends JFrame {
             for (final DimensionType dimensionType : DimensionType.values()) {
                 dimensions.add(dimensionType);
                 SetupCheckBox checkBox = new SetupCheckBox(dimensionType.getName().substring(0, 1).toUpperCase() + dimensionType.getName().substring(1, dimensionType.getName().length()));
-                if (dimensionType.equals(DimensionType.TWO_DIMENSIONAL)) {
-                    checkBox.setSelected(true);
-                }
+                checkBox.setSelected(true);
                 dimensionsPanel.add(checkBox);
                 checkBox.addItemListener(new ItemListener() {
                     @Override
@@ -537,15 +535,6 @@ public class GdxSetupUI extends JFrame {
                         SetupCheckBox box = (SetupCheckBox) e.getSource();
                         if (box.isSelected()) {
                             dimensions.add(dimensionType);
-                            if (dimensionType.equals(DimensionType.TWO_DIMENSIONAL)) {
-                                if (dimensions.contains(DimensionType.THREE_DIMENSIONAL)) {
-                                    dimensions.remove(DimensionType.THREE_DIMENSIONAL);
-                                }
-                            } else {
-                                if (dimensions.contains(DimensionType.TWO_DIMENSIONAL)) {
-                                    dimensions.remove(DimensionType.TWO_DIMENSIONAL);
-                                }
-                            }
                         } else {
                             if (dimensions.contains(dimensionType)) {
                                 dimensions.remove(dimensionType);
@@ -625,7 +614,7 @@ public class GdxSetupUI extends JFrame {
                         }
                         SetupCheckBox depCheckBox = new SetupCheckBox(projDep.name().substring(0, 1) + projDep.name().substring(1, projDep.name().length()).toLowerCase());
                         depCheckBox.setToolTipText(projDep.getDescription());
-                        if (projDep.equals(ProjectDependency.BOX2D)) {
+                        if (projDep.equals(ProjectDependency.BULLET)) {
                             depCheckBox.setSelected(true);
                         }
                         extensionPanel.add(depCheckBox);

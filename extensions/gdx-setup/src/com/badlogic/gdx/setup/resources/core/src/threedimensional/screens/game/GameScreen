@@ -1,0 +1,146 @@
+package %PACKAGE%.screens.game;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import %PACKAGE%.Assets;
+import %PACKAGE%.%MAIN_CLASS%;
+import %PACKAGE%.extendables.%MAIN_CLASS%Screen;
+import %PACKAGE%.screens.main.MainScreen;
+
+public class GameScreen extends %MAIN_CLASS%Screen {
+    private static final String TAG = GameScreen.class.getSimpleName();
+
+    private GameMenu menu;
+    private GameMenuRenderer menuRenderer;
+    private GameWorld world;
+    private GameWorldRenderer worldRenderer;
+
+    public GameScreen(%MAIN_CLASS% game) {
+        super(game);
+        menu = new GameMenu();
+        menuRenderer = new GameMenuRenderer(menu);
+        world = new GameWorld();
+        worldRenderer = new GameWorldRenderer(world);
+        worldRenderer.debugMode = false;
+    }
+
+    public void render(float delta) {
+        super.render(delta);
+        update(delta);
+        worldRenderer.render();
+        menuRenderer.render();
+    }
+
+    private void update(float delta) {
+        switch (world.state) {
+            case GameWorld.STATE_RUNNING:
+                world.update(delta);
+                break;
+        }
+    }
+
+    public void dispose() {
+        world.dispose();
+        worldRenderer.dispose();
+        menuRenderer.dispose();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        switch (keycode) {
+            case Input.Keys.ENTER:
+                playGame();
+                break;
+            case Input.Keys.LEFT:
+                world.character.velocity.x = -5;
+                world.character.rotation = -90;
+                break;
+            case Input.Keys.RIGHT:
+                world.character.velocity.x = 5;
+                world.character.rotation = 90;
+                break;
+            case Input.Keys.UP:
+                world.character.velocity.z = -5;
+                world.character.rotation = 180;
+                break;
+            case Input.Keys.DOWN:
+                world.character.velocity.z = 5;
+                world.character.rotation = 0;
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        switch (keycode) {
+            case Input.Keys.ESCAPE:
+                if(world.state == GameWorld.STATE_RUNNING) {
+                    pauseGame();
+                } else {
+                    game.setScreen(new MainScreen(game));
+                }
+                break;
+            case Input.Keys.LEFT:
+                world.character.velocity.x = 0;
+                break;
+            case Input.Keys.UP:
+                world.character.velocity.z = 0;
+                break;
+            case Input.Keys.RIGHT:
+                world.character.velocity.x = 0;
+                break;
+            case Input.Keys.DOWN:
+                world.character.velocity.z = 0;
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        touchPoint.set(Gdx.input.getX(), Math.abs(Gdx.input.getY() - Gdx.graphics.getHeight()), 0);
+        switch (world.state) {
+            case GameWorld.STATE_RUNNING:
+                if (menu.pauseButton.bounds.contains(touchPoint.x, touchPoint.y)) {
+                    pauseGame();
+                }
+                break;
+        }
+        return false;
+    }
+
+    private void pauseGame() {
+        world.state = GameWorld.STATE_PAUSE;
+        Assets.playSound(Assets.clickSound);
+        menu.pauseButton.scale = 0;
+        menu.mainButton.scale = 1;
+        menu.playButton.scale = 1;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        touchPoint.set(Gdx.input.getX(), Math.abs(Gdx.input.getY() - Gdx.graphics.getHeight()), 0);
+        switch (world.state) {
+            case GameWorld.STATE_PAUSE:
+            case GameWorld.STATE_READY:
+            case GameWorld.STATE_FINISH:
+            case GameWorld.STATE_GAME_OVER:
+                if (menu.mainButton.bounds.contains(touchPoint.x, touchPoint.y)) {
+                    Assets.playSound(Assets.clickSound);
+                    game.setScreen(new MainScreen(game));
+                } else if (menu.playButton.bounds.contains(touchPoint.x, touchPoint.y)) {
+                    playGame();
+                }
+        }
+        return false;
+    }
+
+    private void playGame() {
+        world.state = GameWorld.STATE_RUNNING;
+        Assets.playSound(Assets.clickSound);
+        menu.pauseButton.scale = 1;
+        menu.mainButton.scale = 0;
+        menu.playButton.scale = 0;
+    }
+}

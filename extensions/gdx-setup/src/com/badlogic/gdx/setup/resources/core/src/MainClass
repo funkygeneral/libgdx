@@ -1,27 +1,59 @@
 package %PACKAGE%;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
+import %PACKAGE%.screens.loading.LoadingScreen;
 
-public class %MAIN_CLASS% extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-	}
+public class %MAIN_CLASS% extends Game {
+    public static final String VERSION = "0.0.0.1";
+    public static final String NAME = "%MAIN_CLASS%";
+    public static final int WIDTH = 1280;
+    public static final int HEIGHT = 768;
 
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
-	}
+    FPSLogger fps;
+
+    public IActivityRequestHandler myRequestHandler;
+
+    public %MAIN_CLASS%(IActivityRequestHandler handler) {
+        myRequestHandler = handler;
+    }
+
+    @Override
+    public void create() {
+        Assets.manager = new AssetManager();
+        Assets.loadingManager = new AssetManager();
+
+        Assets.loadLoading();
+        while (!Assets.loadingManager.update()) {
+            //System.out.println("Loading Progress: " + (Assets.loadingManager.getProgress() * 100) + "%");
+        }
+        Assets.loadLoadingSprites();
+
+        fps = new FPSLogger();
+        Settings.load();
+        setScreen(new LoadingScreen(this));
+    }
+
+    @Override
+    public void render() {
+        super.render();
+        //fps.log();
+    }
+
+    public static Color getYellowColor() {
+        return new Color(1f, 1f, 0.4f, 1);
+    }
+
+    public static Color getBlueColor() {
+        return new Color(0.15f, 0.15f, 0.6f, 1);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        getScreen().dispose();
+        Assets.dispose();
+    }
 }

@@ -1,0 +1,47 @@
+package %PACKAGE%.extendables;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.physics.bullet.DebugDrawer;
+import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
+import %PACKAGE%.shaders.GaussianShader;
+import %PACKAGE%.shaders.SampleShader;
+import %PACKAGE%.shaders.TestShader;
+import %PACKAGE%.shaders.ToonifyShader;
+
+public class %MAIN_CLASS%WorldRenderer {
+    public PerspectiveCamera cam;
+    public ModelBatch modelBatch;
+    public Environment environment;
+    public Shader shader;
+
+    public DebugDrawer debugDrawer;
+
+    public boolean debugMode;
+
+    public %MAIN_CLASS%WorldRenderer() {
+        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        modelBatch = new ModelBatch();
+        environment = new Environment();
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.75f, 0.75f, 0.75f, 0.75f));
+
+        shader = new GaussianShader();
+        shader.init();
+
+        // Bullet Debugging
+        debugDrawer = new DebugDrawer();
+        debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
+    }
+
+    public void render() {
+    }
+
+    public void dispose() {
+    }
+}

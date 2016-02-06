@@ -1,0 +1,21 @@
+package %PACKAGE%.objects.models;
+
+import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
+
+public class Character extends %MAIN_CLASS%Object {
+    public int rotation = 0;
+
+    public Character(GameObject gameObject) {
+        super(gameObject);
+        this.gameObject.body.setUserValue(2);
+        this.gameObject.body.setCollisionFlags(this.gameObject.body.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
+        //this.gameObject.body.setContactCallbackFlag(World.FLAG_MACOCO);
+        //this.gameObject.body.setContactCallbackFilter(World.FLAG_ALL);
+    }
+
+    public void update(float delta) {
+        position.add(velocity.x * delta, velocity.y * delta, velocity.z * delta);
+        setRotation(0, 1, 0, rotation);
+        super.update(delta);
+    }
+}
