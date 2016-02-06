@@ -6,11 +6,17 @@ Modular setup powered by gradle, allowing any combination of sub projects and of
 This version will create a demo 3D Game for you so you can start working on your game right away.
 Try out your ideas right away.
 
-Please uncheck HTML though because it need Bullet to work.
+Please uncheck HTML though because it needs Bullet to work.
 
-Will add 2D Game Demo soon.
+![Setup Ui](http://i.imgur.com/HQafoYR.png)
 
-![Setup Ui](http://i.imgur.com/LXBE7Ko.png)
+![Setup Ui](http://i.imgur.com/mhsnCyp.png)
+
+![Setup Ui](http://i.imgur.com/BynfqMa.png)
+
+![Setup Ui](http://i.imgur.com/1Rn02AU.png)
+
+I will add a 2D Game Demo soon.
 
 Example of use:
 
