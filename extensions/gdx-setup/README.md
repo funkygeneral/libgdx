@@ -3,7 +3,14 @@ Libgdx gradle setup
 
 Modular setup powered by gradle, allowing any combination of sub projects and official extensions to get you up and running in a few clicks.  Although this tool will handle setup for you, LEARN GRADLE!
 
-![Setup Ui](http://i.imgur.com/7fUXXM3.png)
+This version will create a demo 3D Game for you so you can start working on your game right away.
+Try out your ideas right away.
+
+Please uncheck HTML though because it need Bullet to work.
+
+Will add 2D Game Demo soon.
+
+![Setup Ui](http://i.imgur.com/LXBE7Ko.png)
 
 Example of use:
 
