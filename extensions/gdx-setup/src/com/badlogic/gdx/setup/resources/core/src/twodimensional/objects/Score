@@ -1,0 +1,40 @@
+package %PACKAGE%.objects;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
+import %PACKAGE%.Assets;
+import %PACKAGE%.%MAIN_CLASS%;
+
+public class Score extends DynamicGameObject {
+
+    public float stateTime;
+
+    public String scoreString = "0";
+    private BitmapFont scoreFont;
+    private GlyphLayout glyphLayout;
+    private Color yellowColor;
+
+    public Score(float x, float y) {
+        super(x, y, Assets.funkyLogo.getWidth(), Assets.funkyLogo.getHeight());
+        this.scale = 1;
+        this.alpha = 1;
+        this.scoreFont = Assets.getFont(Assets.smallFont);
+        this.glyphLayout = new GlyphLayout();
+        this.yellowColor = %MAIN_CLASS%.getYellowColor();
+    }
+
+    public void update (float deltaTime) {
+        stateTime += deltaTime;
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alpha);
+        int scoreStringLength = (int) (scoreString.length() * scale);
+        glyphLayout.setText(scoreFont, scoreString, 0, scoreStringLength, yellowColor, 0, Align.right, false, null);
+        scoreFont.draw(batch, glyphLayout, position.x, position.y);
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1);
+    }
+}

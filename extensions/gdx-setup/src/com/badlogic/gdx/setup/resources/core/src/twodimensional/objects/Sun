@@ -1,0 +1,26 @@
+package %PACKAGE%.objects;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import %PACKAGE%.Assets;
+
+/**
+ * Created by nlyden on 2/7/16.
+ */
+public class Sun extends DynamicGameObject {
+
+    public float stateTime;
+
+    public Sun(float x, float y) {
+        super(x, y, Assets.sun.getWidth(), Assets.sun.getHeight());
+    }
+
+    public void update(float deltaTime) {
+        stateTime += deltaTime;
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alpha);
+        batch.draw(Assets.sun, position.x, position.y - (height / 2), (width / 2), (height / 2), width, height, scale, scale, rotation);
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1);
+    }
+}

@@ -1,0 +1,24 @@
+package %PACKAGE%.screens.main;
+
+import %PACKAGE%.extendables.%MAIN_CLASS%MenuRenderer;
+
+public class MainMenuRenderer extends %MAIN_CLASS%MenuRenderer {
+
+    private final MainMenu menu;
+
+    public MainMenuRenderer(MainMenu menu) {
+        this.menu = menu;
+    }
+
+    public void render() {
+        super.render();
+        spriteBatch.begin();
+        spriteBatch.enableBlending();
+        menu.logo.draw(spriteBatch);
+        menu.pauseButton.draw(spriteBatch);
+        menu.playButton.draw(spriteBatch);
+        menu.burnBar.draw(spriteBatch);
+        menu.score.draw(spriteBatch);
+        spriteBatch.end();
+    }
+}

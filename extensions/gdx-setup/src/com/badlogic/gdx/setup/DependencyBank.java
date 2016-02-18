@@ -236,6 +236,7 @@ public class DependencyBank {
     }
 
     public enum DimensionType {
+        TWO_DIMENSIONAL("2d"),
         THREE_DIMENSIONAL("3d");
 
         private final String name;

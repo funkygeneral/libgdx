@@ -1,0 +1,135 @@
+package %PACKAGE%.screens.main;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import %PACKAGE%.Assets;
+import %PACKAGE%.%MAIN_CLASS%;
+import %PACKAGE%.extendables.%MAIN_CLASS%Screen;
+import %PACKAGE%.objects.BurnBar;
+import %PACKAGE%.objects.Girl;
+
+public class MainScreen extends %MAIN_CLASS%Screen {
+    private static final String TAG = MainScreen.class.getSimpleName();
+
+    private MainMenu menu;
+    private MainMenuRenderer menuRenderer;
+    private MainWorld world;
+    private MainWorldRenderer worldRenderer;
+
+    public MainScreen(%MAIN_CLASS% game) {
+        super(game);
+        menu = new MainMenu();
+        menuRenderer = new MainMenuRenderer(menu);
+        world = new MainWorld();
+        worldRenderer = new MainWorldRenderer(world);
+    }
+
+    public void render(float delta) {
+        super.render(delta);
+        update(delta);
+        worldRenderer.render();
+        menuRenderer.render();
+    }
+
+    private void update(float delta) {
+        switch (world.state) {
+            case MainWorld.STATE_RUNNING:
+                if(world.sunScreenTime > 0) {
+                    world.sunScreenTime -= delta;
+                    menu.burnBar.burnFactor = BurnBar.BURN_FACTOR_SCREEN;
+                } else {
+                    world.sunScreenTime = 0;
+                    menu.burnBar.burnFactor = BurnBar.BURN_FACTOR_NORMAL;
+                }
+                world.update(delta);
+                int scoreInt = (int) world.score;
+                menu.score.scoreString = String.format("%,d", scoreInt);
+                menu.update(delta);
+                break;
+            case MainWorld.STATE_GAME_OVER:
+                break;
+        }
+    }
+
+    public void dispose() {
+        world.dispose();
+        worldRenderer.dispose();
+        menuRenderer.dispose();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        switch (keycode) {
+            case Input.Keys.SPACE:
+                if(world.girl.velocity.y == 0) {
+                    world.girl.velocity.y = Girl.JUMP_STRENGTH;
+                }
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        switch (keycode) {
+            case Input.Keys.ESCAPE:
+                game.setScreen(new MainScreen(game));
+                break;
+            case Input.Keys.ENTER:
+                playGame();
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        touchPoint.set(Gdx.input.getX(), Math.abs(Gdx.input.getY() - Gdx.graphics.getHeight()), 0);
+        switch (world.state) {
+            case MainWorld.STATE_RUNNING:
+                if(world.girl.velocity.y == 0) {
+                    world.girl.velocity.y = Girl.JUMP_STRENGTH;
+                }
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        touchPoint.set(Gdx.input.getX(), Math.abs(Gdx.input.getY() - Gdx.graphics.getHeight()), 0);
+        switch (world.state) {
+            case MainWorld.STATE_READY:
+            case MainWorld.STATE_GAME_OVER:
+            case MainWorld.STATE_PAUSE:
+                if (menu.playButton.bounds.contains(touchPoint.x, touchPoint.y)) {
+                    Assets.playSound(Assets.clickSound);
+                    playGame();
+                    Assets.getMusic(Assets.theme).play();
+                }
+                break;
+            case MainWorld.STATE_RUNNING:
+                if (menu.pauseButton.bounds.contains(touchPoint.x, touchPoint.y)) {
+                    Assets.playSound(Assets.clickSound);
+                    pauseGame();
+                    Assets.getMusic(Assets.theme).pause();
+                }
+                break;
+        }
+        return false;
+    }
+
+    private void playGame() {
+        world.state = MainWorld.STATE_RUNNING;
+        world.obstacles.clear();
+        menu.logo.scale = 0;
+        menu.playButton.scale = 0;
+        menu.pauseButton.scale = 1;
+    }
+
+    private void pauseGame() {
+        world.state = MainWorld.STATE_PAUSE;
+        menu.playButton.scale = 1;
+        menu.pauseButton.scale = 0;
+    }
+}

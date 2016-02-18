@@ -1,0 +1,25 @@
+package %PACKAGE%.objects;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import %PACKAGE%.Assets;
+
+public class Rectangle extends DynamicGameObject {
+
+    public float stateTime;
+    public TextureRegion textureRegion;
+
+    public Rectangle(float x, float y, float width, float height) {
+        super(x, y, width, height);
+    }
+
+    public void update(float deltaTime) {
+        stateTime += deltaTime;
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alpha);
+        batch.draw(textureRegion, position.x, position.y, (width / 2), (height / 2), width, height, scale, scale, rotation);
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1);
+    }
+}

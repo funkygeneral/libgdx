@@ -1,0 +1,34 @@
+package %PACKAGE%.extendables;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
+
+public class %MAIN_CLASS%MenuRenderer {
+    private PerspectiveCamera camera;
+
+    public SpriteBatch spriteBatch;
+
+    private final Matrix4 viewMatrix = new Matrix4();
+
+    public %MAIN_CLASS%MenuRenderer() {
+        camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.position.set(0, 0, 50f);
+        camera.lookAt(0,0,0);
+        camera.near = 1f;
+        camera.far = 300f;
+        camera.update();
+        spriteBatch = new SpriteBatch();
+    }
+
+    public void render() {
+        viewMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        spriteBatch.setProjectionMatrix(viewMatrix);
+    }
+
+    public void dispose() {
+        spriteBatch.dispose();
+    }
+}

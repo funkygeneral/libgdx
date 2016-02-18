@@ -1,0 +1,23 @@
+package %PACKAGE%.objects;
+
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+
+public class GameObject {
+    public final Vector2 position;
+    public float width;
+    public float height;
+    public float scale;
+    public float alpha;
+    public float rotation;
+    public final Rectangle bounds;
+
+    public GameObject(float x, float y, float width, float height) {
+        this.position = new Vector2(x, y);
+        this.width = width;
+        this.height = height;
+        this.bounds = new Rectangle(x - width / 2, y - height / 2, width, height);
+        this.alpha = 1;
+        this.scale = 1;
+    }
+}

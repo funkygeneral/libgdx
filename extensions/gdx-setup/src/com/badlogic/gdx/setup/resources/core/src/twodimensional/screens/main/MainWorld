@@ -1,0 +1,147 @@
+package %PACKAGE%.screens.main;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
+import %PACKAGE%.Assets;
+import %PACKAGE%.extendables.%MAIN_CLASS%World;
+import %PACKAGE%.objects.Girl;
+import %PACKAGE%.objects.Obstacle;
+import %PACKAGE%.objects.Rectangle;
+import %PACKAGE%.objects.Sun;
+import %PACKAGE%.objects.SunScreen;
+
+import java.util.Random;
+
+public class MainWorld extends %MAIN_CLASS%World {
+    private static final String TAG = MainWorld.class.getSimpleName();
+
+    public static final int STATE_READY = 0;
+    public static final int STATE_RUNNING = 1;
+    public static final int STATE_PAUSE = 2;
+    public static final int STATE_GAME_OVER = 3;
+    private static final float GRAVITY = 4f;
+    private static final float KNOCKOUT_TIME = 5f;
+    private float beachY;
+
+    public Rectangle sky;
+    public Rectangle water;
+    public Rectangle sand;
+    public Girl girl;
+    public Sun sun;
+
+    public Array<Obstacle> obstacles = new Array<Obstacle>();
+    public Array<SunScreen> sunScreens = new Array<SunScreen>();
+    private float stateTime;
+    public float sunScreenTime;
+    private float interval;
+    private float objectSpeed;
+
+    private Random random;
+    private float chanceOfSunScreen = 0.6f;
+    public float score;
+    public float knockOutTime;
+
+    public MainWorld() {
+        super();
+        sky = new Rectangle(0, 0, STAGE_WIDTH, STAGE_HEIGHT);
+        sky.textureRegion = Assets.sky;
+        water = new Rectangle(0, 0, STAGE_WIDTH, CENTER_Y * 0.6f);
+        water.textureRegion = Assets.water;
+
+        beachY = CENTER_Y * 0.5f;
+
+        random = new Random();
+        this.interval = 5;
+        this.objectSpeed = 3;
+        this.knockOutTime = 0;
+
+        sand = new Rectangle(0, 0, STAGE_WIDTH, beachY);
+        sand.textureRegion = Assets.sand;
+
+        girl = new Girl(CENTER_X / 2, beachY);
+        sun = new Sun(CENTER_X / 2, STAGE_HEIGHT * 0.75f);
+    }
+
+    public void dispose() {
+        super.dispose();
+    }
+
+    public void update(float delta) {
+        stateTime += delta;
+        if (state == STATE_RUNNING) {
+            // GIRL
+            if (knockOutTime <= 0) {
+                girl.update(delta);
+                if (girl.position.y > beachY) {
+                    Gdx.app.log("World", "Taking girl down");
+                    girl.velocity.y -= GRAVITY * delta;
+                } else {
+                    girl.position.y = beachY;
+                    girl.velocity.y = 0;
+                }
+
+                // OBSTACLES
+                if (stateTime > interval) {
+                    spawnObject();
+                    stateTime = 0;
+                }
+
+                checkForCollisions(delta);
+            } else {
+                knockOutTime -= delta;
+            }
+        }
+    }
+
+    private void checkForCollisions(float delta) {
+        int obstacleLength = obstacles.size;
+        for (int i = 0; i < obstacleLength; i++) {
+            Obstacle obstacle = obstacles.get(i);
+            obstacle.update(delta);
+            if (girl.bounds.overlaps(obstacle.bounds)) {
+                knockOutTime = KNOCKOUT_TIME;
+                girl.speed = 0;
+                girl.stateTime = 0;
+                obstacles.removeIndex(i);
+                obstacleLength--;
+            }
+            if (obstacle.position.x < 0) {
+                obstacles.removeIndex(i);
+                obstacleLength--;
+            }
+        }
+        int sunScreenLength = sunScreens.size;
+        for (int i = 0; i < sunScreenLength; i++) {
+            SunScreen sunScreen = sunScreens.get(i);
+            sunScreen.update(delta);
+            if (girl.bounds.overlaps(sunScreen.bounds)) {
+                sunScreenTime = 5;
+                sunScreens.removeIndex(i);
+                sunScreenLength--;
+            }
+            if (sunScreen.position.x < 0) {
+                sunScreens.removeIndex(i);
+                sunScreenLength--;
+            }
+        }
+        score += delta * 5;
+    }
+
+    private void spawnObject() {
+        if (interval > 2) {
+            interval -= 0.2f;
+        } else {
+            interval = 2;
+        }
+        float randomChance = random.nextFloat();
+        if (randomChance < chanceOfSunScreen) {
+            Obstacle obstacle = new Obstacle(STAGE_WIDTH, beachY, 0);
+            obstacle.speed = objectSpeed;
+            obstacles.add(obstacle);
+        } else {
+            SunScreen sunScreen = new SunScreen(STAGE_WIDTH, beachY, 0);
+            sunScreen.speed = objectSpeed;
+            sunScreens.add(sunScreen);
+        }
+    }
+}

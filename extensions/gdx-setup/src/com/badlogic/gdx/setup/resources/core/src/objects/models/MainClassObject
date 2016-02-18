@@ -1,0 +1,36 @@
+package %PACKAGE%.objects.models;
+
+import com.badlogic.gdx.math.Vector3;
+
+public class %MAIN_CLASS%Object {
+    public GameObject gameObject;
+    public Vector3 position;
+    public Vector3 velocity;
+
+    public %MAIN_CLASS%Object(GameObject gameObject) {
+        this.gameObject = gameObject;
+        position = new Vector3();
+        velocity = new Vector3();
+    }
+
+    public void setPosition(Vector3 position) {
+        this.position = position;
+        gameObject.transform.setTranslation(position.x, position.y, position.z);
+        gameObject.body.setWorldTransform(this.gameObject.transform);
+    }
+
+    public void setRotation(float x, float y, float z, float angle) {
+        gameObject.transform.setToRotation(x, y, z, angle);
+        gameObject.body.setWorldTransform(gameObject.transform);
+    }
+
+    public void rotate(float x, float y, float z, float angle) {
+        gameObject.transform.rotate(x, y, z, angle);
+        gameObject.body.setWorldTransform(gameObject.transform);
+    }
+
+    public void update(float delta) {
+        gameObject.transform.setTranslation(position);
+        gameObject.body.setWorldTransform(gameObject.transform);
+    }
+}

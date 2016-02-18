@@ -1,0 +1,27 @@
+package %PACKAGE%.objects;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
+import %PACKAGE%.Assets;
+
+public class PauseButton extends DynamicGameObject {
+
+    public float stateTime;
+
+    public PauseButton(float x, float y) {
+        super(x, y, Assets.pauseButton.getWidth(), Assets.pauseButton.getHeight());
+    }
+
+    public void update (float deltaTime) {
+        stateTime += deltaTime;
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alpha);
+        batch.draw(Assets.pauseButton, position.x - (width / 2), position.y - (height / 2), (width / 2), (height / 2), width, height, scale, scale, rotation);
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1);
+    }
+}

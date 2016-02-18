@@ -1,10 +1,22 @@
 package %PACKAGE%;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
+import com.badlogic.gdx.assets.loaders.TextureAtlasLoader;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.ResolutionFileResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.ResolutionFileResolver.Resolution;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g3d.Model;
 
 public class Assets {
     public static AssetManager loadingManager = new AssetManager();
@@ -12,4 +24,118 @@ public class Assets {
 
     public static final Resolution[] resolutions = {new Resolution(320, 480, "320dp"), new Resolution(480, 640, "520dp"), new Resolution(640, 820, "720dp"), new Resolution(1000, 1600, "1080dp")};
     public static final ResolutionFileResolver resolver = new ResolutionFileResolver(new InternalFileHandleResolver(), resolutions);
+
+
+    // LOADING ASSETS
+    public static final AssetDescriptor<TextureAtlas> loadingAtlas = new AssetDescriptor<TextureAtlas>("textures/loading.txt", TextureAtlas.class);
+    public static Sprite funkyLogo;
+
+    public static final AssetDescriptor<BitmapFont> loadingFont = new AssetDescriptor<BitmapFont>("font/big_font.fnt", BitmapFont.class);
+
+    // TEXTURE ATLASSES
+    public static final AssetDescriptor<TextureAtlas> mainAtlas = new AssetDescriptor<TextureAtlas>("textures/main.txt", TextureAtlas.class);
+    public static Sprite playButton;
+    public static Sprite pauseButton;
+    public static Sprite logo;
+    public static Sprite tree;
+    public static Animation girl;
+    public static Sprite sand;
+    public static Sprite sun;
+    public static Sprite sky;
+    public static Sprite cloud;
+    public static Sprite sunscreen;
+    public static Sprite water;
+    public static Animation obstacles;
+
+    // FONTS
+    public static final AssetDescriptor<BitmapFont> bigFont = new AssetDescriptor<BitmapFont>("font/big_font.fnt", BitmapFont.class);
+    public static final AssetDescriptor<BitmapFont> smallFont = new AssetDescriptor<BitmapFont>("font/small_font.fnt", BitmapFont.class);
+    public static final AssetDescriptor<BitmapFont> descriptionFont = new AssetDescriptor<BitmapFont>("font/description_font.fnt", BitmapFont.class);
+
+    // MUSIC
+    public static final AssetDescriptor<Music> theme = new AssetDescriptor<Music>("sounds/roq_sinf.mp3", Music.class);
+
+    // SOUNDS
+    public static final AssetDescriptor<Sound> clickSound = new AssetDescriptor<Sound>("sounds/click.mp3", Sound.class);
+
+    public static void loadLoading() {
+        loadingManager.setLoader(TextureAtlas.class, new TextureAtlasLoader(resolver));
+        loadingManager.setLoader(BitmapFont.class, new BitmapFontLoader(resolver));
+
+        loadingManager.load(loadingAtlas);
+        loadingManager.load(loadingFont);
+    }
+
+    public static void loadLoadingSprites() {
+        funkyLogo = new Sprite(loadingManager.get(loadingAtlas).findRegion("funkyLogo"));
+    }
+
+    public static void loadManager() {
+        // Set Loaders
+        manager.setLoader(TextureAtlas.class, new TextureAtlasLoader(resolver));
+        manager.setLoader(BitmapFont.class, new BitmapFontLoader(resolver));
+
+        // Load Textures
+        manager.load(mainAtlas);
+
+        // Load Music
+        manager.load(theme);
+
+        // Load Sounds
+        manager.load(clickSound);
+
+        // Load Font
+        manager.load(bigFont);
+        manager.load(smallFont);
+        manager.load(descriptionFont);
+    }
+
+    public static void loadAssets() {
+        loadMain();
+    }
+
+    private static void loadMain() {
+        playButton = new Sprite(manager.get(mainAtlas).findRegion("play_button"));
+        pauseButton = new Sprite(manager.get(mainAtlas).findRegion("pause_button"));
+        logo = new Sprite(manager.get(mainAtlas).findRegion("logo"));
+        tree = new Sprite(manager.get(mainAtlas).findRegion("tree"));
+        sand = new Sprite(manager.get(mainAtlas).findRegion("sand"));
+        sun = new Sprite(manager.get(mainAtlas).findRegion("sun"));
+        sky = new Sprite(manager.get(mainAtlas).findRegion("sky"));
+        cloud = new Sprite(manager.get(mainAtlas).findRegion("cloud"));
+        sunscreen = new Sprite(manager.get(mainAtlas).findRegion("sunscreen"));
+        water = new Sprite(manager.get(mainAtlas).findRegion("water"));
+        obstacles = new Animation(1, manager.get(mainAtlas).findRegions("obstacle"));
+        girl = new Animation(0.1f, manager.get(mainAtlas).findRegions("girl"));
+        girl.setPlayMode(Animation.PlayMode.LOOP);
+    }
+
+    public static BitmapFont getLoadingFont() {
+        BitmapFont fontFile = loadingManager.get(loadingFont);
+        return fontFile;
+    }
+
+    public static BitmapFont getFont(AssetDescriptor<BitmapFont> assetDescriptor) {
+        BitmapFont fontFile = manager.get(assetDescriptor);
+        return fontFile;
+    }
+
+    public static Music getMusic(AssetDescriptor<Music> assetDescriptor) {
+        Music musicFile = manager.get(assetDescriptor);
+        return musicFile;
+    }
+
+    public static Sound getSound(AssetDescriptor<Sound> assetDescriptor) {
+        Sound soundFile = manager.get(assetDescriptor);
+        return soundFile;
+    }
+
+    public static void playSound(AssetDescriptor<Sound> sound) {
+        if (Settings.soundEnabled) getSound(sound).play(1);
+    }
+
+    public static void dispose() {
+        loadingManager.dispose();
+        manager.dispose();
+    }
 }

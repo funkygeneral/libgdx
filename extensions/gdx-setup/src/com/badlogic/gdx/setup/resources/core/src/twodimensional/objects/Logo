@@ -1,0 +1,27 @@
+package %PACKAGE%.objects;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
+import %PACKAGE%.Assets;
+
+public class Logo extends DynamicGameObject {
+
+    public float stateTime;
+
+    public Logo(float x, float y) {
+        super(x, y, Assets.logo.getWidth(), Assets.logo.getHeight());
+    }
+
+    public void update(float deltaTime) {
+        stateTime += deltaTime;
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alpha);
+        batch.draw(Assets.logo, position.x - (width / 2), position.y - (height / 2), (width / 2), (height / 2), width, height, scale, scale, rotation);
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1);
+    }
+}

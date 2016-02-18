@@ -321,31 +321,38 @@ public class GdxSetup {
 
         // Sounds
         project.files.add(new ProjectFile("android/assets/sounds/click.mp3", assetPath + "/sounds/click.mp3", false));
+        project.files.add(new ProjectFile("android/assets/sounds/roq_sinf.mp3", assetPath + "/sounds/roq_sinf.mp3", false));
 
+        String dimensionPackage = "twodimensional";
+        if (builder.dimensions.contains(DimensionType.TWO_DIMENSIONAL)) {
+            dimensionPackage = "twodimensional";
+        } else if (builder.dimensions.contains(DimensionType.THREE_DIMENSIONAL)) {
+            dimensionPackage = "threedimensional";
+        }
         // Textures
         // 320dp
-        project.files.add(new ProjectFile("android/assets/textures/320dp/loading.txt", assetPath + "/textures/320dp/loading.txt", false));
-        project.files.add(new ProjectFile("android/assets/textures/320dp/loading.png", assetPath + "/textures/320dp/loading.png", false));
-        project.files.add(new ProjectFile("android/assets/textures/320dp/main.txt", assetPath + "/textures/320dp/main.txt", false));
-        project.files.add(new ProjectFile("android/assets/textures/320dp/main320.png", assetPath + "/textures/320dp/main320.png", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/320dp/loading.txt", assetPath + "/textures/320dp/loading.txt", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/320dp/loading.png", assetPath + "/textures/320dp/loading.png", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/320dp/main.txt", assetPath + "/textures/320dp/main.txt", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/320dp/main320.png", assetPath + "/textures/320dp/main320.png", false));
 
         // 520dp
-        project.files.add(new ProjectFile("android/assets/textures/520dp/loading.txt", assetPath + "/textures/520dp/loading.txt", false));
-        project.files.add(new ProjectFile("android/assets/textures/520dp/loading.png", assetPath + "/textures/520dp/loading.png", false));
-        project.files.add(new ProjectFile("android/assets/textures/520dp/main.txt", assetPath + "/textures/520dp/main.txt", false));
-        project.files.add(new ProjectFile("android/assets/textures/520dp/main520.png", assetPath + "/textures/520dp/main520.png", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/520dp/loading.txt", assetPath + "/textures/520dp/loading.txt", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/520dp/loading.png", assetPath + "/textures/520dp/loading.png", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/520dp/main.txt", assetPath + "/textures/520dp/main.txt", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/520dp/main520.png", assetPath + "/textures/520dp/main520.png", false));
 
         // 720dp
-        project.files.add(new ProjectFile("android/assets/textures/720dp/loading.txt", assetPath + "/textures/720dp/loading.txt", false));
-        project.files.add(new ProjectFile("android/assets/textures/720dp/loading.png", assetPath + "/textures/720dp/loading.png", false));
-        project.files.add(new ProjectFile("android/assets/textures/720dp/main.txt", assetPath + "/textures/720dp/main.txt", false));
-        project.files.add(new ProjectFile("android/assets/textures/720dp/main720.png", assetPath + "/textures/720dp/main720.png", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/720dp/loading.txt", assetPath + "/textures/720dp/loading.txt", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/720dp/loading.png", assetPath + "/textures/720dp/loading.png", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/720dp/main.txt", assetPath + "/textures/720dp/main.txt", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/720dp/main720.png", assetPath + "/textures/720dp/main720.png", false));
 
         // 1080dp
-        project.files.add(new ProjectFile("android/assets/textures/1080dp/loading.txt", assetPath + "/textures/1080dp/loading.txt", false));
-        project.files.add(new ProjectFile("android/assets/textures/1080dp/loading.png", assetPath + "/textures/1080dp/loading.png", false));
-        project.files.add(new ProjectFile("android/assets/textures/1080dp/main.txt", assetPath + "/textures/1080dp/main.txt", false));
-        project.files.add(new ProjectFile("android/assets/textures/1080dp/main1080.png", assetPath + "/textures/1080dp/main1080.png", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/1080dp/loading.txt", assetPath + "/textures/1080dp/loading.txt", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/1080dp/loading.png", assetPath + "/textures/1080dp/loading.png", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/1080dp/main.txt", assetPath + "/textures/1080dp/main.txt", false));
+        project.files.add(new ProjectFile("android/assets/textures/" + dimensionPackage + "/1080dp/main1080.png", assetPath + "/textures/1080dp/main1080.png", false));
 
         // android project
         if (builder.modules.contains(ProjectType.ANDROID)) {
@@ -398,60 +405,104 @@ public class GdxSetup {
             project.files.add(new ProjectFile("ios/robovm.xml", true));
         }
 
-        // twodimensional project
-        String dimensionPackage = "threedimensional";
+        if (builder.dimensions.contains(DimensionType.TWO_DIMENSIONAL)) {
+            dimensionPackage = "twodimensional";
+            // twodimensional project
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/Assets", "core/src/" + packageDir + "/Assets.java", true));
+            project.files.add(new ProjectFile("core/src/Settings", "core/src/" + packageDir + "/Settings.java", true));
+            project.files.add(new ProjectFile("core/src/IActivityRequestHandler", "core/src/" + packageDir + "/IActivityRequestHandler.java", true));
 
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/Assets", "core/src/" + packageDir + "/Assets.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/Settings", "core/src/" + packageDir + "/Settings.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/IActivityRequestHandler", "core/src/" + packageDir + "/IActivityRequestHandler.java", true));
+            // extendables
+            project.files.add(new ProjectFile("core/src/extendables/MainClassMenu", "core/src/" + packageDir + "/extendables/" + mainClass + "Menu.java", true));
+            project.files.add(new ProjectFile("core/src/extendables/MainClassMenuRenderer", "core/src/" + packageDir + "/extendables/" + mainClass + "MenuRenderer.java", true));
+            project.files.add(new ProjectFile("core/src/extendables/MainClassScreen", "core/src/" + packageDir + "/extendables/" + mainClass + "Screen.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/extendables/MainClassWorld", "core/src/" + packageDir + "/extendables/" + mainClass + "World.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/extendables/MainClassWorldRenderer", "core/src/" + packageDir + "/extendables/" + mainClass + "WorldRenderer.java", true));
 
-        // extendables
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/extendables/MainClassMenu", "core/src/" + packageDir + "/extendables/" + mainClass + "Menu.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/extendables/MainClassMenuRenderer", "core/src/" + packageDir + "/extendables/" + mainClass + "MenuRenderer.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/extendables/MainClassScreen", "core/src/" + packageDir + "/extendables/" + mainClass + "Screen.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/extendables/MainClassWorld", "core/src/" + packageDir + "/extendables/" + mainClass + "World.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/extendables/MainClassWorldRenderer", "core/src/" + packageDir + "/extendables/" + mainClass + "WorldRenderer.java", true));
+            // objects
+            // sprites
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/DynamicGameObject", "core/src/" + packageDir + "/objects/DynamicGameObject.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/GameObject", "core/src/" + packageDir + "/objects/GameObject.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/BurnBar", "core/src/" + packageDir + "/objects/BurnBar.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/DeveloperLogo", "core/src/" + packageDir + "/objects/DeveloperLogo.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/Girl", "core/src/" + packageDir + "/objects/Girl.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/Logo", "core/src/" + packageDir + "/objects/Logo.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/Obstacle", "core/src/" + packageDir + "/objects/Obstacle.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/PlayButton", "core/src/" + packageDir + "/objects/PlayButton.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/PauseButton", "core/src/" + packageDir + "/objects/PauseButton.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/Rectangle", "core/src/" + packageDir + "/objects/Rectangle.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/Score", "core/src/" + packageDir + "/objects/Score.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/Sun", "core/src/" + packageDir + "/objects/Sun.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/SunScreen", "core/src/" + packageDir + "/objects/SunScreen.java", true));
 
-        // objects
-        // models
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/models/Character", "core/src/" + packageDir + "/objects/models/Character.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/models/Floor", "core/src/" + packageDir + "/objects/models/Floor.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/models/GameObject", "core/src/" + packageDir + "/objects/models/GameObject.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/models/MainClassObject", "core/src/" + packageDir + "/objects/models/" + mainClass + "Object.java", true));
+            if (builder.screens.contains(ScreenType.LOADING)) {
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/loading/LoadingMenu", "core/src/" + packageDir + "/screens/loading/LoadingMenu.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/loading/LoadingMenuRenderer", "core/src/" + packageDir + "/screens/loading/LoadingMenuRenderer.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/loading/LoadingScreen", "core/src/" + packageDir + "/screens/loading/LoadingScreen.java", true));
+            }
+            if (builder.screens.contains(ScreenType.MAIN)) {
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainMenu", "core/src/" + packageDir + "/screens/main/MainMenu.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainMenuRenderer", "core/src/" + packageDir + "/screens/main/MainMenuRenderer.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainWorld", "core/src/" + packageDir + "/screens/main/MainWorld.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainScreen", "core/src/" + packageDir + "/screens/main/MainScreen.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainWorldRenderer", "core/src/" + packageDir + "/screens/main/MainWorldRenderer.java", true));
+            }
+        } else if(builder.dimensions.contains(DimensionType.THREE_DIMENSIONAL)) {
+            dimensionPackage = "threedimensional";
+            // threedimensional project
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/Assets", "core/src/" + packageDir + "/Assets.java", true));
+            project.files.add(new ProjectFile("core/src/Settings", "core/src/" + packageDir + "/Settings.java", true));
+            project.files.add(new ProjectFile("core/src/IActivityRequestHandler", "core/src/" + packageDir + "/IActivityRequestHandler.java", true));
 
-        // sprites
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/sprites/Button", "core/src/" + packageDir + "/objects/sprites/Button.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/sprites/DeveloperLogo", "core/src/" + packageDir + "/objects/sprites/DeveloperLogo.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/sprites/DynamicGameObject", "core/src/" + packageDir + "/objects/sprites/DynamicGameObject.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/sprites/GameObject", "core/src/" + packageDir + "/objects/sprites/GameObject.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/sprites/Logo", "core/src/" + packageDir + "/objects/sprites/Logo.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/sprites/PlayButton", "core/src/" + packageDir + "/objects/sprites/PlayButton.java", true));
+            // extendables
+            project.files.add(new ProjectFile("core/src/extendables/MainClassMenu", "core/src/" + packageDir + "/extendables/" + mainClass + "Menu.java", true));
+            project.files.add(new ProjectFile("core/src/extendables/MainClassMenuRenderer", "core/src/" + packageDir + "/extendables/" + mainClass + "MenuRenderer.java", true));
+            project.files.add(new ProjectFile("core/src/extendables/MainClassScreen", "core/src/" + packageDir + "/extendables/" + mainClass + "Screen.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/extendables/MainClassWorld", "core/src/" + packageDir + "/extendables/" + mainClass + "World.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/extendables/MainClassWorldRenderer", "core/src/" + packageDir + "/extendables/" + mainClass + "WorldRenderer.java", true));
 
-        // shaders
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/shaders/GaussianShader", "core/src/" + packageDir + "/shaders/GaussianShader.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/shaders/SampleShader", "core/src/" + packageDir + "/shaders/SampleShader.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/shaders/TestShader", "core/src/" + packageDir + "/shaders/TestShader.java", true));
-        project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/shaders/ToonifyShader", "core/src/" + packageDir + "/shaders/ToonifyShader.java", true));
+            // objects
+            // models
+            project.files.add(new ProjectFile("core/src/objects/models/GameObject", "core/src/" + packageDir + "/objects/models/GameObject.java", true));
+            project.files.add(new ProjectFile("core/src/objects/models/MainClassObject", "core/src/" + packageDir + "/objects/models/" + mainClass + "Object.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/models/Character", "core/src/" + packageDir + "/objects/models/Character.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/models/Floor", "core/src/" + packageDir + "/objects/models/Floor.java", true));
 
-        if (builder.screens.contains(ScreenType.LOADING)) {
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/loading/LoadingMenu", "core/src/" + packageDir + "/screens/loading/LoadingMenu.java", true));
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/loading/LoadingMenuRenderer", "core/src/" + packageDir + "/screens/loading/LoadingMenuRenderer.java", true));
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/loading/LoadingScreen", "core/src/" + packageDir + "/screens/loading/LoadingScreen.java", true));
+            // sprites
+            project.files.add(new ProjectFile("core/src/objects/sprites/DynamicGameObject", "core/src/" + packageDir + "/objects/sprites/DynamicGameObject.java", true));
+            project.files.add(new ProjectFile("core/src/objects/sprites/GameObject", "core/src/" + packageDir + "/objects/sprites/GameObject.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/sprites/Button", "core/src/" + packageDir + "/objects/sprites/Button.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/sprites/DeveloperLogo", "core/src/" + packageDir + "/objects/sprites/DeveloperLogo.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/sprites/Logo", "core/src/" + packageDir + "/objects/sprites/Logo.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/objects/sprites/PlayButton", "core/src/" + packageDir + "/objects/sprites/PlayButton.java", true));
+
+            // shaders
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/shaders/GaussianShader", "core/src/" + packageDir + "/shaders/GaussianShader.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/shaders/SampleShader", "core/src/" + packageDir + "/shaders/SampleShader.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/shaders/TestShader", "core/src/" + packageDir + "/shaders/TestShader.java", true));
+            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/shaders/ToonifyShader", "core/src/" + packageDir + "/shaders/ToonifyShader.java", true));
+
+            if (builder.screens.contains(ScreenType.LOADING)) {
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/loading/LoadingMenu", "core/src/" + packageDir + "/screens/loading/LoadingMenu.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/loading/LoadingMenuRenderer", "core/src/" + packageDir + "/screens/loading/LoadingMenuRenderer.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/loading/LoadingScreen", "core/src/" + packageDir + "/screens/loading/LoadingScreen.java", true));
+            }
+            if (builder.screens.contains(ScreenType.MAIN)) {
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainMenu", "core/src/" + packageDir + "/screens/main/MainMenu.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainMenuRenderer", "core/src/" + packageDir + "/screens/main/MainMenuRenderer.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainWorld", "core/src/" + packageDir + "/screens/main/MainWorld.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainScreen", "core/src/" + packageDir + "/screens/main/MainScreen.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainWorldRenderer", "core/src/" + packageDir + "/screens/main/MainWorldRenderer.java", true));
+            }
+            if (builder.screens.contains(ScreenType.GAME)) {
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/game/GameMenu", "core/src/" + packageDir + "/screens/game/GameMenu.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/game/GameMenuRenderer", "core/src/" + packageDir + "/screens/game/GameMenuRenderer.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/game/GameScreen", "core/src/" + packageDir + "/screens/game/GameScreen.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/game/GameWorld", "core/src/" + packageDir + "/screens/game/GameWorld.java", true));
+                project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/game/GameWorldRenderer", "core/src/" + packageDir + "/screens/game/GameWorldRenderer.java", true));
+            }
         }
-        if (builder.screens.contains(ScreenType.MAIN)) {
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainMenu", "core/src/" + packageDir + "/screens/main/MainMenu.java", true));
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainMenuRenderer", "core/src/" + packageDir + "/screens/main/MainMenuRenderer.java", true));
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainWorld", "core/src/" + packageDir + "/screens/main/MainWorld.java", true));
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainScreen", "core/src/" + packageDir + "/screens/main/MainScreen.java", true));
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/main/MainWorldRenderer", "core/src/" + packageDir + "/screens/main/MainWorldRenderer.java", true));
-        }
-        if (builder.screens.contains(ScreenType.GAME)) {
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/game/GameMenu", "core/src/" + packageDir + "/screens/game/GameMenu.java", true));
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/game/GameMenuRenderer", "core/src/" + packageDir + "/screens/game/GameMenuRenderer.java", true));
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/game/GameScreen", "core/src/" + packageDir + "/screens/game/GameScreen.java", true));
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/game/GameWorld", "core/src/" + packageDir + "/screens/game/GameWorld.java", true));
-            project.files.add(new ProjectFile("core/src/" + dimensionPackage + "/screens/game/GameWorldRenderer", "core/src/" + packageDir + "/screens/game/GameWorldRenderer.java", true));
-        }
+
 
         Map<String, String> values = new HashMap<String, String>();
         values.put("%APP_NAME%", appName);

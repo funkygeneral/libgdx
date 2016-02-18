@@ -1,0 +1,31 @@
+package %PACKAGE%.screens.main;
+
+import %PACKAGE%.extendables.%MAIN_CLASS%Menu;
+import %PACKAGE%.objects.BurnBar;
+import %PACKAGE%.objects.Logo;
+import %PACKAGE%.objects.PauseButton;
+import %PACKAGE%.objects.PlayButton;
+import %PACKAGE%.objects.Score;
+
+public class MainMenu extends %MAIN_CLASS%Menu {
+
+    public Logo logo;
+    public PauseButton pauseButton;
+    public PlayButton playButton;
+    public BurnBar burnBar;
+    public Score score;
+
+    public MainMenu() {
+        super();
+        this.logo = new Logo(CENTER_X, STAGE_HEIGHT * 0.75f);
+        this.pauseButton = new PauseButton(STAGE_WIDTH * 0.05f, STAGE_HEIGHT * 0.925f);
+        pauseButton.scale = 0;
+        this.playButton = new PlayButton(CENTER_X, STAGE_HEIGHT * 0.3f);
+        this.burnBar = new BurnBar(STAGE_WIDTH - (CENTER_X * 0.3f), STAGE_HEIGHT - (CENTER_Y * 0.2f), (CENTER_X * 0.3f), (CENTER_Y * 0.2f));
+        this.score = new Score(STAGE_WIDTH - (CENTER_X * 0.1f), STAGE_HEIGHT - (CENTER_Y * 0.3f));
+    }
+
+    public void update(float delta) {
+        burnBar.update(delta);
+    }
+}

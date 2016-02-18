@@ -1,0 +1,42 @@
+package %PACKAGE%.objects;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import %PACKAGE%.Assets;
+
+/**
+ * Created by nlyden on 2/7/16.
+ */
+public class BurnBar extends DynamicGameObject {
+
+    public static final float BURN_FACTOR_NORMAL = 1f;
+    public static final float BURN_FACTOR_SCREEN = 0.2f;
+
+    private float stateTime;
+    public float burnAmount;
+    public float burnFactor;
+
+    public BurnBar(float x, float y, float width, float height) {
+        super(x, y, width, height);
+        burnAmount = 1;
+        burnFactor = BURN_FACTOR_NORMAL;
+    }
+
+    public void update(float deltaTime) {
+        if(burnAmount < 100) {
+            burnAmount += (deltaTime * burnFactor);
+        } else {
+            burnAmount = 100;
+        }
+        stateTime += deltaTime;
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alpha);
+        if(burnFactor < BURN_FACTOR_NORMAL) {
+            batch.draw(Assets.water, position.x, position.y, (width / 2), (height / 2), (width / 100) * burnAmount, height, scale, scale, rotation);
+        } else {
+            batch.draw(Assets.sand, position.x, position.y, (width / 2), (height / 2), (width / 100) * burnAmount, height, scale, scale, rotation);
+        }
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1);
+    }
+}

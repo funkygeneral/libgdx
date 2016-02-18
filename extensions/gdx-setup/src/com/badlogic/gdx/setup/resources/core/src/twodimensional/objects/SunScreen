@@ -1,0 +1,33 @@
+package %PACKAGE%.objects;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import %PACKAGE%.Assets;
+
+/**
+ * Created by nlyden on 2/7/16.
+ */
+public class SunScreen extends DynamicGameObject {
+
+    public float stateTime, speed, referenceWidth;
+
+    public SunScreen(float x, float y, int type) {
+        super(x, y, Assets.sunscreen.getWidth(), Assets.sunscreen.getHeight());
+        this.speed = 3;
+        referenceWidth = Assets.obstacles.getKeyFrame(type).getRegionWidth();
+        bounds.width = width / 2;
+        bounds.setPosition(position.x + (width * 0.25f), position.y);
+    }
+
+    public void update(float deltaTime) {
+        position.x -= ((deltaTime * referenceWidth) * speed);
+        bounds.setPosition(position.x + (width * 0.25f), position.y);
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 0.25f);
+        batch.draw(Assets.sand, bounds.getX(), bounds.getY(), bounds.width, bounds.height);
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, alpha);
+        batch.draw(Assets.sunscreen, position.x, position.y, (width / 2), (height / 2), width, height, scale, scale, rotation);
+        batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1);
+    }
+}
